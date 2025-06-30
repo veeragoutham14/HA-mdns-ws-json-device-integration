@@ -138,7 +138,7 @@ class websocketclient:
                                 await calendar_entity.async_update_event(
                                     uid=key,
                                     event={
-                                        "summary": key.replace("_", " ").title(),
+                                        "summary": key.removeprefix("CAL_").replace("_", " ").title(),
                                         "start": start_time,
                                         "end": end_time,
                                         "description": f"Hygiene Event: {key}",
@@ -148,7 +148,7 @@ class websocketclient:
                                 # CREATE a new event
                                 await calendar_entity.async_create_event(
                                     uid=key,
-                                    summary=key.replace("_", " ").title(),
+                                    summary= key.removeprefix("CAL_").replace("_", " ").title(),
                                     start=start_time,
                                     end=end_time,
                                     description=f"Hygiene Event: {key}",
