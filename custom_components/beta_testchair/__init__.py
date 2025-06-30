@@ -55,15 +55,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     identifiers={(DOMAIN, entry.unique_id)},  # ← Must match entity's device_info
     manufacturer=entry.data["manufacturer"],
     model=entry.data["model"],
-    name=entry.title.replace("._testkavo._tcp.local.", ""),
+    name=entry.title.replace("._kavochair._tcp.local.", ""),
     sw_version=entry.data["version"]
     )
 
     # Forward entry to sensor platform
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    await client.connect()
-
+    #await client.connect()
+    hass.async_create_task(client.connect())
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
@@ -73,3 +73,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
         await entry_data["client"].disconnect()
 
     return True
+
