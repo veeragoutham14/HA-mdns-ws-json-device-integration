@@ -10,9 +10,12 @@ from homeassistant.util import dt as dt_util
 from datetime import timedelta
 from datetime import timezone
 from .const import DOMAIN
-
+from homeassistant.helpers.storage import Store
 
 _LOGGER = logging.getLogger(__name__)
+
+STORAGE_VERSION = 1
+STORAGE_KEY_TEMPLATE = "beta_testchair_calendar_{}"
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
     """Set up hygiene calendar."""
@@ -25,16 +28,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     device_name = integration_data.get("device_name", "Test Chair")
 
     calendar_entity = HygieneCalendar(
+        hass=hass,
+        entry_id=entry.entry_id,
         name=f"Hygiene Plan: {device_name}",
         unique_id=f"{entry.entry_id}_hygiene_plan"
     )
 
     hass.data[DOMAIN][entry.entry_id]["calendar_entity"] = calendar_entity
     hass.data[DOMAIN][entry.entry_id]["add_calendar_entities"] = async_add_entities
+    await calendar_entity._load_events()
     async_add_entities([calendar_entity])
 
 class HygieneCalendar(CalendarEntity):
-    def __init__(self, name, unique_id):
+    def __init__(self, hass: HomeAssistant, entry_id: str, name: str, unique_id: str):
+        self.hass = hass
+        self._entry_id = entry_id
         self._name = name
         self._unique_id = unique_id
         self._attr_has_entity_name = True
@@ -132,6 +140,7 @@ class HygieneCalendar(CalendarEntity):
 
         _LOGGER.debug("📅 Created CalendarEvent with data: %s", vars(event))
         self._events.append(event)
+        await self._save_events()
         self.async_write_ha_state()
 
     async def async_update_event(
@@ -149,6 +158,7 @@ class HygieneCalendar(CalendarEntity):
                 existing_event.end = event.get("end")
                 existing_event.description = event.get("description", "")
                 existing_event.location = event.get("location", "")
+                await self._save_events()
                 self.async_write_ha_state()
                 return
 
@@ -160,4 +170,48 @@ class HygieneCalendar(CalendarEntity):
     ) -> None:
         """Delete an event from the calendar."""
         self._events = [e for e in self._events if e.uid != uid]
+        await self._save_events()
         self.async_write_ha_state()
+
+
+    
+    async def _save_events(self):
+        key = STORAGE_KEY_TEMPLATE.format(self._unique_id)
+        store = Store(self.hass, STORAGE_VERSION, key)
+        await store.async_save([
+            {
+                "summary": e.summary,
+                "start": e.start.isoformat() if isinstance(e.start, datetime.datetime) else e.start,
+                "end": e.end.isoformat() if isinstance(e.end, datetime.datetime) else e.end,
+                "description": e.description,
+                "location": e.location,
+                "uid": getattr(e, "uid", None)
+            } for e in self._events
+        ])
+
+
+    
+    async def _load_events(self):
+        key = STORAGE_KEY_TEMPLATE.format(self._unique_id)
+        store = Store(self.hass, STORAGE_VERSION, key)
+        data = await store.async_load()
+        self._events = []
+
+        if data:
+            for e in data:
+            # Parse ISO strings to datetime objects
+                start = dt_util.parse_datetime(e.get("start")) if e.get("start") else None
+                end = dt_util.parse_datetime(e.get("end")) if e.get("end") else None
+
+                event = CalendarEvent(
+                    summary=e.get("summary", ""),
+                    start=start,
+                    end=end,
+                    description=e.get("description", ""),
+                    location=e.get("location", "")
+                )
+                event.uid = e.get("uid")  # Restore UID manually
+
+                self._events.append(event)
+
+        _LOGGER.debug("📅 Loaded %d persisted calendar events", len(self._events))
