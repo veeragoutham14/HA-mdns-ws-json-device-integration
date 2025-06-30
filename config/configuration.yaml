@@ -11,6 +11,4 @@ scene: !include scenes.yaml
 
 logger:
   default: warning
-  
-    
 
