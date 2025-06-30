@@ -26,7 +26,7 @@ class TestChairConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         _LOGGER.warning("🔍 async_step_zeroconf called with: %s", discovery_info)
 
         host = discovery_info.host
-        name = discovery_info.name
+        name = discovery_info.name.replace("._kavochair._tcp.local.", "")
         hostname = discovery_info.hostname
         device_manufacturer = discovery_info.properties.get("manufacturer","KaVo")
         device_model = discovery_info.properties.get("model","Smart_Chair-X")
@@ -40,7 +40,7 @@ class TestChairConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         self.context.update({
             "title_placeholders": {
-                "name": name.replace("._testkavo._tcp.local.", "")
+                "name": name
             }
         })
 
@@ -62,7 +62,7 @@ class TestChairConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             _LOGGER.warning("✅ Discovery confirmed by user")
-            cleaned_name = self.discovery_info["name"].replace("._testkavo._tcp.local.", "")
+            cleaned_name = self.discovery_info["name"]
             return self.async_create_entry(
                 title= cleaned_name,
                 data={
