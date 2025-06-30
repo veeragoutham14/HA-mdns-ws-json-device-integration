@@ -55,5 +55,3 @@ class ServerConnectionBinarySensor(BinarySensorEntity):
             "model": self._model,
             "sw_version": self._version
         }
-
-    
