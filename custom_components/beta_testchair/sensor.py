@@ -57,3 +57,5 @@ class TestChairSensor(SensorEntity):
 
 
 
+
+
