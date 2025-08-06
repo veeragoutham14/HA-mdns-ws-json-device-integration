@@ -1,11 +1,10 @@
 import logging
 from typing import Any
-
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 import voluptuous as vol
-
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -64,9 +63,10 @@ class TestChairConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.warning("✅ Discovery confirmed by user")
             cleaned_name = self.discovery_info["name"]
             return self.async_create_entry(
-                title= cleaned_name,
+                title=cleaned_name,
                 data={
                     "host": self.discovery_info["host"],
+                    "hostname": self.discovery_info["hostname"],
                     "port": self.discovery_info["port"],
                     "name": cleaned_name,
                     "manufacturer": self.discovery_info["manufacturer"],
@@ -96,7 +96,9 @@ class TestChairConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema({vol.Required("host"): str,
-            vol.Required("port",default=8080): int}),
+            data_schema=vol.Schema({
+                vol.Required("host"): str,
+                vol.Required("port", default=8080): int
+            }),
             errors=errors,
         )

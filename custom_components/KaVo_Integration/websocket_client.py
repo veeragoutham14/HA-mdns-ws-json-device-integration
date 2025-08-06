@@ -10,14 +10,16 @@ from .binary_sensor import ServerConnectionBinarySensor
 from .calendar import HygieneCalendar
 from .const import DOMAIN
 
+
 _LOGGER = logging.getLogger(__name__)
 
 
 class websocketclient:
     
-    def __init__(self, hass:HomeAssistant, host:str, port:int, entry_id:str):
+    def __init__(self, hass:HomeAssistant, host:str, hostname:str, port:int, entry_id:str):
         self.hass = hass
         self.host = host
+        self.hostname = hostname
         self.port = port
         self.websocket = None
         self.entry_id = entry_id
@@ -26,11 +28,14 @@ class websocketclient:
         
 
     async def connect(self):
-        url = f"ws://{self.host}:{self.port}"
+
         retry_delay_time = 5
 
         while True:
             try:
+
+                
+                url = f"ws://{self.host}:{self.port}"
                 _LOGGER.info("🔌 Connecting to WebSocket at %s", url)
                 self.websocket = await websockets.connect(url)
                 _LOGGER.info("✅ Connection with server successful")
@@ -179,3 +184,16 @@ class websocketclient:
 
         except json.JSONDecodeError:
             _LOGGER.warning("Received non-JSON message: %s", message)
+                
+    async def disconnect(self):
+        """Cleanly close the WebSocket connection and stop reconnect attempts."""
+        _LOGGER.warning("🔌 Disconnecting WebSocket client")
+
+        if self.websocket is not None:
+            try:
+                await self.websocket.close()
+                _LOGGER.info("✅ WebSocket connection closed successfully")
+            except Exception as e:
+                _LOGGER.error("❌ Error while closing WebSocket: %s", e)
+            finally:
+                self.websocket = None

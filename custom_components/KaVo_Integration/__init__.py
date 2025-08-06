@@ -22,12 +22,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # --- Get connection info
     host = entry.data["host"]
+    hostname = entry.data["hostname"]
     port = entry.data["port"]
     entry_id = entry.entry_id
 
 
     # --- Create and store WebSocket client
-    client = websocketclient(hass, host, port, entry_id)
+    client = websocketclient(hass, host, hostname, port, entry_id)
     
 
     hass.data.setdefault(DOMAIN, {})
@@ -37,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "binary_sensors": {},
         "add_entities": None,
         "add_binary_sensor_entities": None,
-        "calendar_entity": None,                
+        "calendar_entity": None,
         "add_calendar_entities": None,
         "device_name": entry.title,
         "manufacturer": entry.data.get("manufacturer", "KaVo"),
@@ -59,7 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     sw_version=entry.data["version"]
     )
 
-    # Forward entry to sensor platform
+    # Forward entry to needed platforms
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     #await client.connect()
@@ -73,4 +74,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
         await entry_data["client"].disconnect()
 
     return True
-

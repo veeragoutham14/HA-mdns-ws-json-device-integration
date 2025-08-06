@@ -72,9 +72,10 @@ class HygieneCalendar(CalendarEntity):
 
         for e in upcoming_events:
             if dt_util.as_utc(e.start) <= now <= dt_util.as_utc(e.end):
-                _LOGGER.debug("📅 Event happening: uid=%s start=%s, end=%s, summary=%s", e.uid, e.start, e.end, e.summary)
+                _LOGGER.warning("📅 Event happening: uid=%s start=%s, end=%s, summary=%s", e.uid, e.start, e.end, e.summary)
                 return e  # Current ongoing event
                 
+        _LOGGER.warning("📅 HA looking for even!!!")
         return upcoming_events[0] if upcoming_events else None
 
 

@@ -1,5 +1,4 @@
 import logging
-
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -54,7 +53,6 @@ class TestChairSensor(SensorEntity):
     def update_value(self, value):
         self._attr_native_value = value
         self.async_write_ha_state()
-
 
 
 

@@ -1,11 +1,11 @@
 {
-  "domain": "beta_testchair",
+  "domain": "KaVo_Integration",
   "name": "KaVo Integration",
   "version": "1.0",
   "documentation": "https://example.com",
   "requirements": [],
   "codeowners": ["@veera"],
   "config_flow": true,
-  "zeroconf": ["_testkavo._tcp.local."],
+  "zeroconf": ["_kavochair._tcp.local."],
   "platforms": ["sensor", "binary_sensor", "calendar"]
 }

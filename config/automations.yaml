@@ -14,7 +14,6 @@
       message: EVENT START TRIGGERED!!!!
       title: START
   mode: parallel
-
 - id: '1745931830069'
   alias: EVENT_START_SHELLY_ON
   description: ''
@@ -34,7 +33,6 @@
     entity_id: 21228baf9af600a63edb8b294855473b
     domain: switch
   mode: parallel
-
 - id: '1747312193633'
   alias: Abends/Wöchentlich turn off
   description: ''
