@@ -25,13 +25,14 @@ class websocketclient:
         self.entry_id = entry_id
         self.server_connection_status = None
         self.server_connection_entity = None
+        self._should_run = True
         
 
     async def connect(self):
 
         retry_delay_time = 5
-
-        while True:
+        
+        while self._should_run:
             try:
 
                 
@@ -93,7 +94,9 @@ class websocketclient:
             _LOGGER.error("error while reciving message: %s", e)
 
         finally:
-            await self.connect()
+            if self._should_run:
+                _LOGGER.warning("🔁 Attempting reconnection after disconnect...")
+                await self.connect()
 
 
     async def handle_message(self, message: str):
@@ -188,11 +191,12 @@ class websocketclient:
     async def disconnect(self):
         """Cleanly close the WebSocket connection and stop reconnect attempts."""
         _LOGGER.warning("🔌 Disconnecting WebSocket client")
-
+        self._should_run = False
+        
         if self.websocket is not None:
             try:
                 await self.websocket.close()
-                _LOGGER.info("✅ WebSocket connection closed successfully")
+                _LOGGER.warning("✅ WebSocket connection closed successfully")
             except Exception as e:
                 _LOGGER.error("❌ Error while closing WebSocket: %s", e)
             finally:

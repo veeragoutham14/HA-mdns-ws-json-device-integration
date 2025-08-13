@@ -70,7 +70,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload an entry."""
     entry_data = hass.data[DOMAIN].pop(entry.entry_id, None)
-    if entry_data and entry_data["client"].running:
+    if entry_data and entry_data["client"]:
         await entry_data["client"].disconnect()
 
     return True
