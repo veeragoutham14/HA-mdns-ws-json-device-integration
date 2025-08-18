@@ -6,6 +6,6 @@
   "requirements": [],
   "codeowners": ["@veera"],
   "config_flow": true,
-  "zeroconf": ["_kavochair._tcp.local."],
+  "zeroconf": ["_kavodentalunit._tcp.local."],
   "platforms": ["sensor", "binary_sensor", "calendar"]
 }
