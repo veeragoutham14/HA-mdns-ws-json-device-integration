@@ -15,7 +15,7 @@ from homeassistant.helpers.storage import Store
 _LOGGER = logging.getLogger(__name__)
 
 STORAGE_VERSION = 1
-STORAGE_KEY_TEMPLATE = "beta_testchair_calendar_{}"
+STORAGE_KEY_TEMPLATE = "kavo_calendar_{}"
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
     """Set up hygiene calendar."""
