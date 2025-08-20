@@ -37,7 +37,6 @@ Kopieren
 Bearbeiten
 
 **Keep `hacs.json` in sync** (when distributing via HACS):
-```json
 {
   "name": "KaVo_Integration",
   "render_readme": true,
@@ -48,29 +47,19 @@ Update "homeassistant" when you use newer HA APIs.
 
 Update "hacs" if your repo requires a newer HACS version.
 
-Option B — Manual install (VS Code add-on)
-Open the VS Code add-on in Home Assistant.
-
-Copy only the folder KaVo_Integration/ into:
-
-swift
-Kopieren
-Bearbeiten
+###  Option B — Manual install (VS Code add-on)
+1. Open the VS Code add-on in Home Assistant.
+2.Copy only the folder KaVo_Integration/ into:
 /config/custom_components/KaVo_Integration/
 (create custom_components/ if it doesn’t exist).
+3.Restart Home Assistant.
+4.Add the integration: Settings → Devices & Services → Add Integration → KaVo Integration.
 
-Restart Home Assistant.
-
-Add the integration: Settings → Devices & Services → Add Integration → KaVo Integration.
-
-Features
-Zeroconf/mDNS discovery for plug-and-play device onboarding.
-
+features:
 WebSocket transport with JSON payloads for low-latency, bidirectional updates.
 
 Automatic creation of entities (e.g., sensors, calendars, switches) after connection.
 
-Designed to integrate with CONNECTbase device software.
 
 Troubleshooting
 Integration not found in “Add Integration”
