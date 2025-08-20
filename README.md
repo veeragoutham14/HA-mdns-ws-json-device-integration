@@ -48,6 +48,7 @@ Update "homeassistant" when you use newer HA APIs.
 Update "hacs" if your repo requires a newer HACS version.
 
 ###  Option B — Manual install (VS Code add-on)
+
 1. Open the VS Code add-on in Home Assistant.
 2.Copy only the folder KaVo_Integration/ into:
 /config/custom_components/KaVo_Integration/
