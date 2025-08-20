@@ -46,7 +46,7 @@ Update "hacs" if your repo requires a newer HACS version.
 
 ###  Option B — Manual install (VS Code add-on)
 
-1. **Open the VS Code add-on in Home Assistant**.
+1. Open the VS Code add-on in Home Assistant.
 
 2.**Copy only the folder KaVo_Integration/ into:**
 
@@ -59,6 +59,7 @@ Update "hacs" if your repo requires a newer HACS version.
 4.Add the integration: Settings → Devices & Services → Add Integration → KaVo Integration.
 
 features:
+
 WebSocket transport with JSON payloads for low-latency, bidirectional updates.
 
 Automatic creation of entities (e.g., sensors, calendars, switches) after connection.
