@@ -65,13 +65,17 @@ WebSocket transport with JSON payloads for low-latency, bidirectional updates.
 Automatic creation of entities (e.g., sensors, calendars, switches) after connection.
 
 
-Troubleshooting
+Troubleshooting:
+
 Integration not found in “Add Integration”
+
 Restart HA, then check Settings → System → Logs for errors from custom_components.kavo_integration.
 
 Duplicate/unavailable entities after renaming
+
 Ensure your entities use a stable unique_id (not the display name). If you changed schemes, implement an entity registry migration.
 
-Manual install not loading
+Manual install not loading:
+
 Verify the path is exactly /config/custom_components/KaVo_Integration/ and manifest.json is present. Restart HA.
 
