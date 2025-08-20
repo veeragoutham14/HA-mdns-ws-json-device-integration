@@ -49,10 +49,10 @@ Update "hacs" if your repo requires a newer HACS version.
 
 ###  Option B — Manual install (VS Code add-on)
 
-1. Open the VS Code add-on in Home Assistant.
-2.Copy only the folder KaVo_Integration/ into:
-/config/custom_components/KaVo_Integration/
-(create custom_components/ if it doesn’t exist).
+1. **Open the VS Code add-on in Home Assistant**.
+2.**Copy only the folder KaVo_Integration/ into:**
+**/config/custom_components/KaVo_Integration/**
+**(create custom_components/ if it doesn’t exist).**
 3.Restart Home Assistant.
 4.Add the integration: Settings → Devices & Services → Add Integration → KaVo Integration.
 
